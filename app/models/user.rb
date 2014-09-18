@@ -7,5 +7,5 @@ class User < ActiveRecord::Base
 
   has_many :entries
 
-
+  after_create :init_prefs
 end
