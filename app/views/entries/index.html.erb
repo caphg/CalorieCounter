@@ -13,10 +13,26 @@
 
   <tbody>
       <tr ng-repeat="entry in entries">
-        <td>{{entry.meal}}</td>
-        <td>{{entry.calories}}</td>
-        <td>{{entry.date}}</td>
-        <td>{{entry.description}}</td>
+        <td ng-hide="editingMeal" ng-click="startEditingMeal(entry)">{{entry.meal}}</td>
+        <td ng-show="editingMeal">
+          <input ng-model="entry.meal">
+          <button ng-click="doneEditingMeal(entry.id)">OK</button>
+        </td>
+        <td ng-hide="editingCalories" ng-click="startEditingCalories(entry)">{{entry.calories}}</td>
+        <td ng-show="editingCalories">
+          <input ng-model="entry.calories">
+          <button ng-click="doneEditingCalories(entry.id)">OK</button>
+        </td>
+        <td ng-hide="editingDate" ng-click="startEditingDate(entry)">{{entry.date}}</td>
+        <td ng-show="editingDate">
+          <input ng-model="entry.date">
+          <button ng-click="doneEditingDate(entry.id)">OK</button>
+        </td>
+        <td ng-hide="editingDescription" ng-click="startEditingDescription(entry)">{{entry.description}}</td>
+        <td ng-show="editingDescription">
+          <input ng-model="entry.description">
+          <button ng-click="doneEditingDescription(entry.id)">OK</button>
+        </td>
         <td>x</td>
       </tr>
   </tbody>
