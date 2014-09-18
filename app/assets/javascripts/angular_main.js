@@ -19,32 +19,15 @@ app.filter('firstLetter', function() {
 });
 
 app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http) {
-    //logged in user scope
-    $scope.user = {};
-
-    //all users score
-    $scope.users = {};
-
-    //chat scope
-    $scope.chat = {};
-
-    //current message
-    $scope.chat.message = "";
-
-    //all messages
-    $scope.chat.messages = {};
-
-    $scope.user.notifications = {};
-
 
 
     $scope.init = function () {
         //fetch data
         $http({
-            url: "/users.json",
+            url: "/entries.json",
             method: "GET"
         }).success(function(data){
-
+            $scope.entries = data;
         });
     };
 

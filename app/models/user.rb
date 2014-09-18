@@ -8,4 +8,9 @@ class User < ActiveRecord::Base
   has_many :entries
 
   after_create :init_prefs
+
+  def init_prefs
+    self.daily_calories = 2000
+    self.save
+  end
 end

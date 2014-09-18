@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-no-turbolink ng-cloak ng-controller="CaloriesController" ng-init="init()">
 <h1>Listing entries</h1>
 <table class="table table-striped">
   <thead>
@@ -12,17 +12,13 @@
   </thead>
 
   <tbody>
-    <% @entries.each do |entry| %>
-      <tr>
-        <td><%= entry.meal %></td>
-        <td><%= entry.calories %></td>
-        <td><%= entry.date %></td>
-        <td><%= entry.description %></td>
-        <td><%= link_to 'Show', entry %></td>
-        <td><%= link_to 'Edit', edit_entry_path(entry) %></td>
-        <td><%= link_to 'Destroy', entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <tr ng-repeat="entry in entries">
+        <td>{{entry.meal}}</td>
+        <td>{{entry.calories}}</td>
+        <td>{{entry.date}}</td>
+        <td>{{entry.description}}</td>
+        <td>x</td>
       </tr>
-    <% end %>
   </tbody>
 </table>
 
