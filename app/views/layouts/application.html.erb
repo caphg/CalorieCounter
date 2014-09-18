@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="caloriesApp">
 <head>
-  <title>Lan2Chat</title>
+  <title>CaloriesApp</title>
   <meta name="description" content="Toptal example app">
   <meta name="author" content="Hrvoje Grdic">
 
@@ -20,7 +20,6 @@
 
 <!-- Static navbar -->
 <div class="navbar navbar-default navbar-static-top" role="navigation">
-  <%= gflash %>
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,9 +28,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+        <li><%= link_to "Home", root_url  %></li>
         <% if user_signed_in? %>
             <li class="dropdown">
               <ul class="dropdown-menu" role="menu">
