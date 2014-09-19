@@ -1,11 +1,12 @@
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:show, :edit, :update, :destroy]
+  before_action :set_entry, only: [:show, :destroy, :update]
   before_action :authenticate_user!
 
   # GET /entries
   # GET /entries.json
   def index
     @entries = Entry.where("user_id = ?", current_user)
+    @entry = Entry.new
   end
 
   # GET /entries/1
@@ -13,16 +14,7 @@ class EntriesController < ApplicationController
   def show
   end
 
-  # GET /entries/new
-  def new
-    @entry = Entry.new
-  end
-
-  # GET /entries/1/edit
-  def edit
-  end
-
-  # POST /entries
+   # POST /entries
   # POST /entries.json
   def create
     @entry = Entry.new(entry_params)
@@ -65,11 +57,12 @@ class EntriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
-      @entry = Entry.find(params[:id])
+      @entry = current_user.entries.find_by_id(params[:id])
+      head :unauthorized if @entry.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def entry_params
-      params.require(:entry).permit(:meal, :calories, :date, :description)
+      params.require(:entry).permit(:id, :meal, :calories, :date, :description)
     end
 end

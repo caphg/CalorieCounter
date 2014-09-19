@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :entries
+  resources :entries, only:[:index, :show, :create, :update, :destroy]
 
   get '/user/profile', :to => 'users#profile', :as => :user_profile
 

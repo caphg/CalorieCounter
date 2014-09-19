@@ -1,4 +1,6 @@
 <div class="container" data-no-turbolink ng-cloak ng-controller="CaloriesController" ng-init="init()">
+<h1>Enter new entry</h1>
+<%= render 'form' %>
 <h1>Listing entries</h1>
 <table class="table table-striped">
   <thead>
@@ -40,5 +42,4 @@
 
 <br>
 
-<%= link_to 'New Entry', new_entry_path %>
 </div>

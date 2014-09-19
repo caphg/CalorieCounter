@@ -1,3 +1,4 @@
+<div class="form-inline">
 <%= form_for(@entry) do |f| %>
   <% if @entry.errors.any? %>
     <div id="error_explanation">
@@ -11,24 +12,26 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :meal %><br>
     <%= f.text_field :meal %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :calories %><br>
     <%= f.text_field :calories %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :date %><br>
     <%= f.datetime_select :date %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :description %><br>
     <%= f.text_field :description %>
   </div>
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-group">
+    <br />
+    <%= f.submit "Create", class: "btn btn-primary" %>
   </div>
 <% end %>
+</div>
