@@ -25,15 +25,16 @@ app.filter('firstLetter', function() {
 
 app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http) {
     var dt = new Date();
-    var date = dt.getFullYear() + "/" + dt.getMonth() + "/" + dt.getDate();
+    var dateFrom = dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + dt.getDate();
+    var dateTo = dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + (dt.getDate()+1);
     $scope.editingMeal = false;
     $scope.editingCalories = false;
     $scope.editingDate = false;
     $scope.editingDescription = false;
-    $scope.dateFrom = date;
-    $scope.dateTo = date;
-    $scope.timeFrom = "00:00";
-    $scope.timeTo = "23:59";
+    $scope.dateFrom = dateFrom;
+    $scope.dateTo = dateTo;
+    $scope.timeFrom = "00";
+    $scope.timeTo = "23";
 
     $scope.entry = {};
 

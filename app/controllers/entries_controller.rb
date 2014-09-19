@@ -6,7 +6,9 @@ class EntriesController < ApplicationController
   # GET /entries.json
   def index
     if params.has_key?(:dateFrom) and params.has_key?(:dateTo) and params.has_key?(:timeFrom) and params.has_key?(:timeTo)
-      @entries = Entry.where("user_id = ?").where(date: Time.parse(params[:timeFrom])..Time.parse(params[:timeTo])).where(date: Time.parse(params[:dateFrom]..Time.parse(params[:dateTo])))
+      dateFrom = Date.parse(params[:dateFrom])
+      dateTo = Date.parse(params[:dateTo]) + 1.days
+      @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("date between ? and ?", dateFrom, dateTo)
     else
       @entries = Entry.where("user_id = ?", current_user)
     end

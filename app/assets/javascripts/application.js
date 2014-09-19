@@ -16,4 +16,5 @@
 //= require angular
 //= require angular-resource
 //= require bootstrap
+//= require jquery.datetimepicker
 //= require_tree .
