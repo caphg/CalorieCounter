@@ -35,7 +35,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     $scope.dateTo = dateTo;
     $scope.timeFrom = "00";
     $scope.timeTo = "23";
-
+    $scope.user = {};
     $scope.entry = {};
 
     $scope.init = function () {
@@ -45,6 +45,13 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "GET"
         }).success(function(data){
             $scope.entries = data;
+            $http({
+                url: "/user.json",
+                method: "GET"
+            }).success(function(data){
+                $scope.user.daily_calories = data.daily_calories;
+            });
+            $scope.totalCount();
         });
     };
 
@@ -72,6 +79,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingCalories = false;
+            $scope.totalCount();
         }).fail(function (){
             log("error updating calories");
         });
@@ -89,6 +97,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingDate = false;
+            $scope.totalCount();
         }).fail(function (){
             log("error updating date");
         });
@@ -123,12 +132,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 method: "DELETE"
             }).success(function () {
                 $scope.entries.splice(index,1);
+                $scope.totalCount();
             }).fail(function (){
                 log("error updating description");
             });
 
         }
 
+    };
+
+    $scope.totalCount = function(){
+        var total = 0;
+        $scope.entries.forEach(function(entry) {
+            total += parseInt(entry.calories);
+        });
+        $scope.total = total;
     };
 
 }]);
