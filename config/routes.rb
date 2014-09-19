@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   resources :entries, only:[:index, :show, :create, :update, :destroy]
 
-  get '/user/profile', :to => 'users#profile', :as => :user_profile
+  get '/user', :to => 'users#profile', :as => :user_profile
+  patch '/user', :to => 'users#update'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

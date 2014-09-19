@@ -132,3 +132,35 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     };
 
 }]);
+
+app.controller('UserController', ['$scope', '$http',  function($scope, $http) {
+    $scope.user = {};
+    $scope.editingCalories = false;
+
+    $scope.editCalories = function(){
+        $scope.editingCalories = true;
+    };
+
+    $scope.init = function(){
+      $http({
+          url: "/user.json",
+          method: "GET"
+      }).success(function(data){
+          $scope.user.daily_calories = data.daily_calories;
+      });
+    };
+
+    $scope.update = function(){
+        $http({
+            url: "/user.json",
+            data: {user: {daily_calories: $scope.calories}
+            },
+            method: "PATCH"
+        }).success(function () {
+            $scope.editingCalories = false;
+            $scope.user.daily_calories = $scope.calories;
+        }).fail(function (){
+            log("error updating calories");
+        });
+    };
+}]);

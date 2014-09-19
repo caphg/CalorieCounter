@@ -1,5 +1,6 @@
-<div class="container">
+<div class="container" data-no-turbolink ng-cloak ng-controller="UserController" ng-init="init()">
   User email: <%= @user.email %><br />
 
-  Calories/day: <%= @user.daily_calories %>
+  Calories/day: <div ng-hide="editingCalories"><div class="well">{{user.daily_calories}}</div><button ng-click="editCalories()" class="btn btn-primary">Edit</button></div>
+                <div ng-show="editingCalories"><input ng-model="calories"> <button ng-click="update()">OK</button> </div>
 </div>

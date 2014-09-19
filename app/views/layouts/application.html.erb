@@ -43,7 +43,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
             <li><a href="#" >Welcome <%= current_user.email %></a> </li>
-            <li> <%= link_to 'Profile', user_profile_path , class: "btn btn-default" %></li>
+            <li> <%= link_to 'Profile', user_profile_path, class: "btn btn-default" %></li>
             <li> <%= link_to "Sign out", destroy_user_session_path, :method => :delete %> </li>
         <% else %>
             <li><%= link_to "Sign in!", "/users/sign_in" %></li>

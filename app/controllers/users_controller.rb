@@ -5,15 +5,15 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
-  def update_preferences
+  def update
 
     respond_to do |format|
       if current_user.update(user_params)
-        format.html { redirect_to @user, notice: 'Preferences updated.' }
-        format.json { render :profile, status: :ok, location: @user }
+        format.html { redirect_to current_user, notice: 'Preferences updated.' }
+        format.json { head :ok }
       else
         format.html { render :profile }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { head :unprocessable_entity }
       end
     end
   end
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit()
+    params.require(:user).permit(:daily_calories)
   end
 
 
