@@ -1,6 +1,25 @@
 <div class="container" data-no-turbolink ng-cloak ng-controller="CaloriesController" ng-init="init()">
 <h1>Enter new entry</h1>
 <%= render 'form' %>
+<h3>Filter</h3>
+<div class="form-inline">
+  <div class="form-group">
+    <label for="dateFrom">From date</label><br/>
+    <input ng-model="dateFrom">
+  </div>
+  <div class="form-group">
+    <label for="dateTo">To date</label><br/>
+    <input ng-model="dateTo">
+  </div>
+  <div class="form-group">
+    <label for="timeFrom">From time</label><br/>
+    <input ng-model="timeFrom">
+  </div>
+  <div class="form-group">
+    <label for="timeTo">To time</label><br/>
+    <input ng-model="timeTo">
+  </div>
+</div>
 <h1>Listing entries</h1>
 <table class="table table-striped">
   <thead>

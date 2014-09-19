@@ -24,17 +24,23 @@ app.filter('firstLetter', function() {
 });
 
 app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http) {
+    var dt = new Date();
+    var date = dt.getFullYear() + "/" + dt.getMonth() + "/" + dt.getDate();
     $scope.editingMeal = false;
     $scope.editingCalories = false;
     $scope.editingDate = false;
     $scope.editingDescription = false;
+    $scope.dateFrom = date;
+    $scope.dateTo = date;
+    $scope.timeFrom = "00:00";
+    $scope.timeTo = "23:59";
 
     $scope.entry = {};
 
     $scope.init = function () {
         //fetch data
         $http({
-            url: "/entries.json",
+            url: "/entries.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo,
             method: "GET"
         }).success(function(data){
             $scope.entries = data;

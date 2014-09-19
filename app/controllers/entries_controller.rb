@@ -5,7 +5,12 @@ class EntriesController < ApplicationController
   # GET /entries
   # GET /entries.json
   def index
-    @entries = Entry.where("user_id = ?", current_user)
+    if params.has_key?(:dateFrom) and params.has_key?(:dateTo) and params.has_key?(:timeFrom) and params.has_key?(:timeTo)
+      @entries = Entry.where("user_id = ?").where(date: Time.parse(params[:timeFrom])..Time.parse(params[:timeTo])).where(date: Time.parse(params[:dateFrom]..Time.parse(params[:dateTo])))
+    else
+      @entries = Entry.where("user_id = ?", current_user)
+    end
+
     @entry = Entry.new
   end
 
