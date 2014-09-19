@@ -33,7 +33,7 @@
           <input ng-model="entry.description">
           <button ng-click="doneEditingDescription(entry.id)">OK</button>
         </td>
-        <td>x</td>
+        <td> <a href="#" ng-click="deleteEntry(entry.id, $index)">x</a> </td>
       </tr>
   </tbody>
 </table>

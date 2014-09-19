@@ -9,7 +9,12 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.headers.post = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-    }
+    };
+
+    $httpProvider.defaults.headers.delete = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    };
 }]);
 
 app.filter('firstLetter', function() {
@@ -102,6 +107,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     $scope.startEditingDescription = function(val){
         $scope.editingDescription = true;
         $scope.entry = val;
+    };
+    
+    $scope.deleteEntry = function (id, index) {
+        if( confirm("Are you sure?") ) {
+            $http({
+                url: "/entries/"+id+".json",
+                method: "DELETE"
+            }).success(function () {
+                $scope.entries.splice(index,1);
+            }).fail(function (){
+                log("error updating description");
+            });
+
+        }
+
     };
 
 }]);
