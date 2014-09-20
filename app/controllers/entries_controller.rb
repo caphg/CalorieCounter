@@ -11,10 +11,10 @@ class EntriesController < ApplicationController
       if params[:daily] == 'true'
         @entries = Entry.where('user_id = ?
                            AND EXTRACT(HOUR FROM date) BETWEEN ? AND ?
-                           AND date between ? and ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
+                           AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
                            select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
       else
-        @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("date between ? and ?", dateFrom, dateTo)
+        @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", dateFrom, dateTo)
       end
     else
       @entries = Entry.where("user_id = ?", current_user)
@@ -70,7 +70,7 @@ class EntriesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
       @entry = current_user.entries.find_by_id(params[:id])
-      head :unauthorized if @entry.nil?
+      head :not_found if @entry.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

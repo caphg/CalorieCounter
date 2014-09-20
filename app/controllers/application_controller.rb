@@ -5,9 +5,18 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token, if: :json_request?
 
+  before_filter :update_sanitized_params, if: :devise_controller?
+
+
   protected
 
     def json_request?
       request.format.json?
     end
+
+    #  method to sanitized params for devise user sign up
+    def update_sanitized_params
+      devise_parameter_sanitizer.for(:sign_up) {|u| u.permit(:email,:password, :password_confirmation, :daily_calories)}
+    end
+
 end

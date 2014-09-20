@@ -17,10 +17,18 @@ app.config(['$httpProvider', function($httpProvider) {
     };
 }]);
 
-app.filter('firstLetter', function() {
-    return function(input) {
-        return input.charAt(0).toUpperCase();
-    }
+app.filter('utc', function(){
+
+    return function(val){
+        var date = new Date(val);
+        return new Date(date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds());
+    };
+
 });
 
 app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http) {
@@ -39,25 +47,29 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     $scope.entry = {};
 
     $scope.init = function () {
+        $scope.reloadData();
+        $http({
+            url: "/user.json",
+            method: "GET"
+        }).success(function(data){
+            $scope.user.daily_calories = parseInt(data.daily_calories);
+        });
+    };
+
+    $scope.reloadData = function () {
         //fetch data
         $http({
             url: "/entries.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo,
             method: "GET"
         }).success(function(data){
             $scope.entries = data;
-           // $scope.totalCount();
+            // $scope.totalCount();
         });
         $http({
             url: "/entries.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo+"&daily=true",
             method: "GET"
         }).success(function(data){
             $scope.dailyEntries = data;
-        });
-        $http({
-            url: "/user.json",
-            method: "GET"
-        }).success(function(data){
-            $scope.user.daily_calories = data.daily_calories;
         });
     };
 
@@ -85,7 +97,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingCalories = false;
-           // $scope.totalCount();
+            $scope.reloadData();
         }).fail(function (){
             log("error updating calories");
         });
@@ -103,7 +115,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingDate = false;
-         //   $scope.totalCount();
+            $scope.reloadData();
         }).fail(function (){
             log("error updating date");
         });
@@ -138,7 +150,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 method: "DELETE"
             }).success(function () {
                 $scope.entries.splice(index,1);
-             //   $scope.totalCount();
+                $scope.reloadData();
             }).fail(function (){
                 log("error deleting entry");
             });
@@ -162,8 +174,9 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "POST"
         }).success(function (data) {
             $scope.entries.push(data);
-         //   $scope.totalCount();
-        }).fail(function (){
+            $scope.reloadData();
+        }).fail(function (data){
+            alert(JSON.stringify(data));
             log("error crating entry");
         });
     };

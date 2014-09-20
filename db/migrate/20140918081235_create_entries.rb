@@ -3,7 +3,7 @@ class CreateEntries < ActiveRecord::Migration
     create_table :entries do |t|
       t.string :meal
       t.decimal :calories
-      t.datetime :date
+      t.column :date, 'timestamp with time zone'
       t.string :description
 
       t.timestamps

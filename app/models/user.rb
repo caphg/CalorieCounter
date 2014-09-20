@@ -7,12 +7,12 @@ class User < ActiveRecord::Base
 
   has_many :entries
 
-  validates :daily_calories, numericality: {min:0, max:100000}
-
   after_create :init_prefs
 
   def init_prefs
     self.daily_calories = 2000
     self.save
   end
+
+  validates :daily_calories, numericality: {min:0, max:100000}
 end

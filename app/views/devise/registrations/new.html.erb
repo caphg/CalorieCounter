@@ -12,6 +12,7 @@
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
 
+  <%= f.hidden_field :daily_calories, value: 2000 %>
   <div><%= f.submit "Sign up" %></div>
 <% end %>
 
