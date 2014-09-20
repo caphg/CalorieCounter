@@ -1,37 +1,23 @@
 <div class="form-inline">
-<%= form_for(@entry) do |f| %>
-  <% if @entry.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@entry.errors.count, "error") %> prohibited this entry from being saved:</h2>
-
-      <ul>
-      <% @entry.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="form-group">
-    <%= f.label :meal %><br>
-    <%= f.text_field :meal %>
+    <label for="meal">Meal</label><br />
+    <input type="text" placeholder="Your meal..." ng-model="newEntry.meal">
   </div>
   <div class="form-group">
-    <%= f.label :calories %><br>
-    <%= f.text_field :calories %>
+    <label for="calories">Calories</label><br />
+    <input type="number" placeholder="Calories" ng-model="newEntry.calories">
   </div>
   <div class="form-group">
-    <%= f.label :date %><br>
-    <%= f.datetime_select :date %>
+    <label for="date">Date</label><br />
+    <input id="newEntryDate" type="datetime" placeholder="When was this?" ng-model="newEntry.date">
   </div>
   <div class="form-group">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
+    <label for="description">Description</label><br />
+    <input type="text" placeholder="Description..." ng-model="newEntry.description">
   </div>
 
   <div class="form-group">
     <br />
-    <%= f.submit "Create", class: "btn btn-primary" %>
+    <button class="btn btn-primary" ng-click="createNewEntry()">Create</button>
   </div>
-<% end %>
 </div>

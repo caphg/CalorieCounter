@@ -15,4 +15,8 @@ $( document ).ready(function() {
         datepicker:false,
         format:'H'
     });
+    $('#newEntryDate').datetimepicker({
+        format:'Y/m/d H:m'
+    });
+
 });

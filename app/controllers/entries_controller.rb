@@ -7,13 +7,18 @@ class EntriesController < ApplicationController
   def index
     if params.has_key?(:dateFrom) and params.has_key?(:dateTo) and params.has_key?(:timeFrom) and params.has_key?(:timeTo)
       dateFrom = Date.parse(params[:dateFrom])
-      dateTo = Date.parse(params[:dateTo]) + 1.days
-      @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("date between ? and ?", dateFrom, dateTo)
+      dateTo = Date.parse(params[:dateTo])
+      if params[:daily] == 'true'
+        @entries = Entry.where('user_id = ?
+                           AND EXTRACT(HOUR FROM date) BETWEEN ? AND ?
+                           AND date between ? and ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
+                           select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
+      else
+        @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("date between ? and ?", dateFrom, dateTo)
+      end
     else
       @entries = Entry.where("user_id = ?", current_user)
     end
-
-    @entry = Entry.new
   end
 
   # GET /entries/1

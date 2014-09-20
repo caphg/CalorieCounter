@@ -45,13 +45,19 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "GET"
         }).success(function(data){
             $scope.entries = data;
-            $http({
-                url: "/user.json",
-                method: "GET"
-            }).success(function(data){
-                $scope.user.daily_calories = data.daily_calories;
-            });
-            $scope.totalCount();
+           // $scope.totalCount();
+        });
+        $http({
+            url: "/entries.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo+"&daily=true",
+            method: "GET"
+        }).success(function(data){
+            $scope.dailyEntries = data;
+        });
+        $http({
+            url: "/user.json",
+            method: "GET"
+        }).success(function(data){
+            $scope.user.daily_calories = data.daily_calories;
         });
     };
 
@@ -79,7 +85,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingCalories = false;
-            $scope.totalCount();
+           // $scope.totalCount();
         }).fail(function (){
             log("error updating calories");
         });
@@ -97,7 +103,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             method: "PATCH"
         }).success(function () {
             $scope.editingDate = false;
-            $scope.totalCount();
+         //   $scope.totalCount();
         }).fail(function (){
             log("error updating date");
         });
@@ -132,9 +138,9 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 method: "DELETE"
             }).success(function () {
                 $scope.entries.splice(index,1);
-                $scope.totalCount();
+             //   $scope.totalCount();
             }).fail(function (){
-                log("error updating description");
+                log("error deleting entry");
             });
 
         }
@@ -147,6 +153,19 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             total += parseInt(entry.calories);
         });
         $scope.total = total;
+    };
+
+    $scope.createNewEntry = function(){
+        $http({
+            url: "/entries.json",
+            data: $scope.newEntry,
+            method: "POST"
+        }).success(function (data) {
+            $scope.entries.push(data);
+         //   $scope.totalCount();
+        }).fail(function (){
+            log("error crating entry");
+        });
     };
 
 }]);
