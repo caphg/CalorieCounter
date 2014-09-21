@@ -5,7 +5,7 @@ class EntriesController < ApplicationController
   # GET /entries
   # GET /entries.json
   def index
-    if check_dates
+    if dates_ok?
       @entries = Entry.where("user_id = ?", current_user.id).where("\"time\"(date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", Date.parse(params[:dateFrom]), Date.parse(params[:dateTo]))
     else
       @entries = Entry.where("user_id = ?", current_user)
@@ -16,7 +16,7 @@ class EntriesController < ApplicationController
   # GET /entries/daily
   # GET /entries/daily.json
   def daily
-    if check_dates
+    if dates_ok?
       @entries = Entry.where('user_id = ?
                            AND "time"(date) BETWEEN ? AND ?
                            AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], Date.parse(params[:dateFrom]), Date.parse(params[:dateTo])).
@@ -84,7 +84,7 @@ class EntriesController < ApplicationController
       params.require(:entry).permit(:id, :meal, :calories, :date, :description)
     end
 
-    def check_dates
+    def dates_ok?
       begin
         Date.parse(params[:dateFrom])
         Date.parse(params[:dateTo])

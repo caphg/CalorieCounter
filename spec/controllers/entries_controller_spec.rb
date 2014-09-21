@@ -69,6 +69,7 @@ RSpec.describe EntriesController, :type => :controller do
       assigns(:entries).should =~ [entry_in_range,entry_not_in_date_range,entry_not_in_time_range]
     end
 
+
     it "should redirect to login page if unauthorized" do
       sign_out current_user
       get :index
