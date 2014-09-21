@@ -41,8 +41,8 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     $scope.editingDescription = -1;
     $scope.dateFrom = dateFrom;
     $scope.dateTo = dateTo;
-    $scope.timeFrom = "00";
-    $scope.timeTo = "23";
+    $scope.timeFrom = "00:00";
+    $scope.timeTo = "23:59";
     $scope.user = {};
     $scope.entry = {};
 
@@ -213,14 +213,14 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
         $scope.newEntry.calories = "";
         $scope.newEntry.date = "";
         $scope.newEntry.description = "";
-    }
+    };
 
     var cancelEditing = function (){
         $scope.editingMeal = -1;
         $scope.editingCalories = -1;
         $scope.editingDate = -1;
         $scope.editingDescription = -1;
-    }
+    };
 
 }]);
 

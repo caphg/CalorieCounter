@@ -60,3 +60,6 @@ gem 'will_paginate', '~> 3.0'
 #gem 'capistrano-bundler'
 
 #gem 'capistrano-rvm'
+
+gem 'momentjs-rails', '>= 2.8.1'
+gem 'bootstrap3-datetimepicker-rails', '~> 3.1.3'

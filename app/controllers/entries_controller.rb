@@ -5,20 +5,22 @@ class EntriesController < ApplicationController
   # GET /entries
   # GET /entries.json
   def index
-    if params.has_key?(:dateFrom) and params.has_key?(:dateTo) and params.has_key?(:timeFrom) and params.has_key?(:timeTo)
-      dateFrom = Date.parse(params[:dateFrom])
-      dateTo = Date.parse(params[:dateTo])
-      if params[:daily] == 'true'
-        @entries = Entry.where('user_id = ?
-                           AND EXTRACT(HOUR FROM date) BETWEEN ? AND ?
+      begin
+        dateFrom = Date.parse(params[:dateFrom])
+        dateTo = Date.parse(params[:dateTo])
+        Time.parse(params[:timeFrom])
+        Time.parse(params[:timeTo])
+        if params[:daily] == 'true'
+          @entries = Entry.where('user_id = ?
+                           AND "time"(date) BETWEEN ? AND ?
                            AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
-                           select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
-      else
-        @entries = Entry.where("user_id = ?", current_user.id).where("EXTRACT(HOUR FROM date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", dateFrom, dateTo)
+              select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
+        else
+          @entries = Entry.where("user_id = ?", current_user.id).where("\"time\"(date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", dateFrom, dateTo)
+        end
+      rescue ArgumentError, TypeError
+        @entries = Entry.where("user_id = ?", current_user)
       end
-    else
-      @entries = Entry.where("user_id = ?", current_user)
-    end
   end
 
   # GET /entries/1

@@ -1,25 +1,22 @@
 $( document ).ready(function() {
     $('#dateFrom').datetimepicker({
-        timepicker:false,
-        format:'Y/m/d'
+        pickTime:false,
+        format: 'YYYY/MM/DD'
     });
     $('#dateTo').datetimepicker({
-        timepicker:false,
-        format:'Y/m/d'
+        pickTime:false,
+        format: 'YYYY/MM/DD'
     });
     $('#timeFrom').datetimepicker({
-        datepicker:false,
-        format:'H'
+        pickDate:false,
+        format: 'HH:mm'
     });
     $('#timeTo').datetimepicker({
-        datepicker:false,
-        format:'H'
+        pickDate:false,
+        format: 'HH:mm'
     });
     $('#newEntryDate').datetimepicker({
-        format:'Y/m/d H:m',
-        mask: true
+        format: 'YYYY/MM/DD HH:mm'
     });
-    $('.datetimeelement').datetimepicker({
-        format:'Y/m/d H:m'
-    });
+
 });
