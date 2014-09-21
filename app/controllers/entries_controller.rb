@@ -1,6 +1,6 @@
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:show, :destroy, :update]
   before_action :authenticate_user!
+  before_action :set_entry, only: [:show, :destroy, :update]
 
   # GET /entries
   # GET /entries.json
@@ -14,7 +14,7 @@ class EntriesController < ApplicationController
           @entries = Entry.where('user_id = ?
                            AND "time"(date) BETWEEN ? AND ?
                            AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
-              select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
+                           select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
         else
           @entries = Entry.where("user_id = ?", current_user.id).where("\"time\"(date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", dateFrom, dateTo)
         end
