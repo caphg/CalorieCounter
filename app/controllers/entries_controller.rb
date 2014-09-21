@@ -5,22 +5,26 @@ class EntriesController < ApplicationController
   # GET /entries
   # GET /entries.json
   def index
-      begin
-        dateFrom = Date.parse(params[:dateFrom])
-        dateTo = Date.parse(params[:dateTo])
-        Time.parse(params[:timeFrom])
-        Time.parse(params[:timeTo])
-        if params[:daily] == 'true'
-          @entries = Entry.where('user_id = ?
+    if check_dates
+      @entries = Entry.where("user_id = ?", current_user.id).where("\"time\"(date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", Date.parse(params[:dateFrom]), Date.parse(params[:dateTo]))
+    else
+      @entries = Entry.where("user_id = ?", current_user)
+    end
+
+  end
+
+  # GET /entries/daily
+  # GET /entries/daily.json
+  def daily
+    if check_dates
+      @entries = Entry.where('user_id = ?
                            AND "time"(date) BETWEEN ? AND ?
-                           AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], dateFrom, dateTo).
+                           AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, params[:timeFrom], params[:timeTo], Date.parse(params[:dateFrom]), Date.parse(params[:dateTo])).
                            select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
-        else
-          @entries = Entry.where("user_id = ?", current_user.id).where("\"time\"(date) BETWEEN ? AND ?", params[:timeFrom], params[:timeTo]).where("CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?", dateFrom, dateTo)
-        end
-      rescue ArgumentError, TypeError
-        @entries = Entry.where("user_id = ?", current_user)
-      end
+    else
+      @entries = Entry.where('user_id = ?', current_user.id).
+          select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
+    end
   end
 
   # GET /entries/1
@@ -78,5 +82,17 @@ class EntriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def entry_params
       params.require(:entry).permit(:id, :meal, :calories, :date, :description)
+    end
+
+    def check_dates
+      begin
+        Date.parse(params[:dateFrom])
+        Date.parse(params[:dateTo])
+        Time.parse(params[:timeFrom])
+        Time.parse(params[:timeTo])
+        true
+      rescue TypeError, ArgumentError
+        false
+      end
     end
 end

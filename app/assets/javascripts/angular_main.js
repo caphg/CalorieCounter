@@ -66,7 +66,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             // $scope.totalCount();
         });
         $http({
-            url: "/entries.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo+"&daily=true",
+            url: "/daily.json?dateFrom="+$scope.dateFrom+"&dateTo="+$scope.dateTo+"&timeFrom="+$scope.timeFrom+"&timeTo="+$scope.timeTo,
             method: "GET"
         }).success(function(data){
             $scope.dailyEntries = data;
