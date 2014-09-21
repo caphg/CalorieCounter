@@ -16,7 +16,10 @@ $( document ).ready(function() {
         format:'H'
     });
     $('#newEntryDate').datetimepicker({
+        format:'Y/m/d H:m',
+        mask: true
+    });
+    $('.datetimeelement').datetimepicker({
         format:'Y/m/d H:m'
     });
-
 });

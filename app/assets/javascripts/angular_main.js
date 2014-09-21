@@ -35,10 +35,10 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     var dt = new Date();
     var dateFrom = dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + dt.getDate();
     var dateTo = dt.getFullYear() + "/" + (dt.getMonth()+1) + "/" + (dt.getDate()+1);
-    $scope.editingMeal = false;
-    $scope.editingCalories = false;
-    $scope.editingDate = false;
-    $scope.editingDescription = false;
+    $scope.editingMeal = -1;
+    $scope.editingCalories = -1;
+    $scope.editingDate = -1;
+    $scope.editingDescription = -1;
     $scope.dateFrom = dateFrom;
     $scope.dateTo = dateTo;
     $scope.timeFrom = "00";
@@ -73,73 +73,97 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
         });
     };
 
-    $scope.doneEditingMeal = function(id){
-        $http({
-            url: "/entries/"+id+".json",
-            data: $scope.entry,
-            method: "PATCH"
-        }).success(function () {
-            $scope.editingMeal = false;
-        }).fail(function (){
-            log("error updating meal");
-        });
-    };
-
-    $scope.startEditingMeal = function(val){
-        $scope.editingMeal = true;
-        $scope.entry = val;
-    };
-
-    $scope.doneEditingCalories = function(id){
-        $http({
-            url: "/entries/"+id+".json",
-            data: $scope.entry,
-            method: "PATCH"
-        }).success(function () {
-            $scope.editingCalories = false;
+    $scope.doneEditingMeal = function(id, cancelled){
+        if(cancelled){
+            $scope.editingMeal = -1;
             $scope.reloadData();
-        }).fail(function (){
-            log("error updating calories");
-        });
+        } else {
+            $http({
+                url: "/entries/"+id+".json",
+                data: $scope.entry,
+                method: "PATCH"
+            }).success(function () {
+                $scope.editingMeal = -1;
+            }).fail(function (){
+                log("error updating meal");
+            });
+        }
+
     };
 
-    $scope.startEditingCalories = function(val){
-        $scope.editingCalories = true;
+    $scope.startEditingMeal = function(val, idx){
+        $scope.editingMeal = idx;
         $scope.entry = val;
     };
 
-    $scope.doneEditingDate = function(id){
-        $http({
-            url: "/entries/"+id+".json",
-            data: $scope.entry,
-            method: "PATCH"
-        }).success(function () {
-            $scope.editingDate = false;
+    $scope.doneEditingCalories = function(id, cancelled){
+        if(cancelled){
+            $scope.editingCalories = -1;
             $scope.reloadData();
-        }).fail(function (){
-            log("error updating date");
-        });
+        } else {
+            $http({
+                url: "/entries/"+id+".json",
+                data: $scope.entry,
+                method: "PATCH"
+            }).success(function () {
+                $scope.editingCalories = -1;
+                $scope.reloadData();
+            }).fail(function (){
+                log("error updating calories");
+            });
+        }
+
     };
 
-    $scope.startEditingDate = function(val){
-        $scope.editingDate = true;
+    $scope.startEditingCalories = function(val,idx){
+        $scope.editingCalories = idx;
         $scope.entry = val;
     };
 
-    $scope.doneEditingDescription = function(id){
-        $http({
-            url: "/entries/"+id+".json",
-            data: $scope.entry,
-            method: "PATCH"
-        }).success(function () {
-            $scope.editingDescription = false;
-        }).fail(function (){
-            log("error updating description");
-        });
+    $scope.doneEditingDate = function(id, cancelled){
+        if(cancelled){
+            $scope.editingDate = -1;
+            $scope.reloadData();
+        } else {
+            $http({
+                url: "/entries/"+id+".json",
+                data: $scope.entry,
+                method: "PATCH"
+            }).success(function () {
+                $scope.editingDate = -1;
+                $scope.reloadData();
+            }).fail(function (){
+                log("error updating date");
+            });
+        }
+
     };
 
-    $scope.startEditingDescription = function(val){
-        $scope.editingDescription = true;
+    $scope.startEditingDate = function(val, idx){
+        $scope.editingDate = idx;
+        $scope.entry = val;
+    };
+
+    $scope.doneEditingDescription = function(id, cancelled){
+        if(cancelled){
+            $scope.editingDescription = -1;
+            $scope.reloadData();
+        } else {
+            $http({
+                url: "/entries/"+id+".json",
+                data: $scope.entry,
+                method: "PATCH"
+            }).success(function () {
+                $scope.editingDescription = -1;
+            }).fail(function (){
+                log("error updating description");
+            });
+        }
+
+    };
+
+    $scope.startEditingDescription = function(val, idx){
+        $scope.editingDescription = idx;
         $scope.entry = val;
     };
     
@@ -151,6 +175,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             }).success(function () {
                 $scope.entries.splice(index,1);
                 $scope.reloadData();
+                cancelEditing();
             }).fail(function (){
                 log("error deleting entry");
             });
@@ -175,11 +200,27 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
         }).success(function (data) {
             $scope.entries.push(data);
             $scope.reloadData();
+            cancelEditing();
+            resetNewForm();
         }).fail(function (data){
             alert(JSON.stringify(data));
             log("error crating entry");
         });
     };
+
+    var resetNewForm = function () {
+        $scope.newEntry.meal= "";
+        $scope.newEntry.calories = "";
+        $scope.newEntry.date = "";
+        $scope.newEntry.description = "";
+    }
+
+    var cancelEditing = function (){
+        $scope.editingMeal = -1;
+        $scope.editingCalories = -1;
+        $scope.editingDate = -1;
+        $scope.editingDescription = -1;
+    }
 
 }]);
 

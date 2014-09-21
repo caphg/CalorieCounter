@@ -38,25 +38,29 @@
 
   <tbody>
       <tr ng-repeat="entry in entries | orderBy:'-date'">
-        <td ng-hide="editingMeal" ng-click="startEditingMeal(entry)">{{entry.meal}}</td>
-        <td ng-show="editingMeal">
+        <td ng-hide="editingMeal == $index" ng-click="startEditingMeal(entry, $index)">{{entry.meal}}</td>
+        <td ng-show="editingMeal == $index">
           <input ng-model="entry.meal">
-          <button ng-click="doneEditingMeal(entry.id)">OK</button>
+          <button ng-click="doneEditingMeal(entry.id, false)">OK</button>
+          <button ng-click="doneEditingMeal(entry.id, true)">Cancel</button>
         </td>
-        <td ng-hide="editingCalories" ng-click="startEditingCalories(entry)">{{entry.calories}}</td>
-        <td ng-show="editingCalories">
+        <td ng-hide="editingCalories == $index" ng-click="startEditingCalories(entry, $index)">{{entry.calories}}</td>
+        <td ng-show="editingCalories == $index">
           <input ng-model="entry.calories">
-          <button ng-click="doneEditingCalories(entry.id)">OK</button>
+          <button ng-click="doneEditingCalories(entry.id, false)">OK</button>
+          <button ng-click="doneEditingCalories(entry.id, true)">Cancel</button>
         </td>
-        <td ng-hide="editingDate" ng-click="startEditingDate(entry)">{{entry.date | utc | date:'yyyy-MM-dd HH:mm'}}</td>
-        <td ng-show="editingDate">
-          <input ng-model="entry.date">
-          <button ng-click="doneEditingDate(entry.id)">OK</button>
+        <td ng-hide="editingDate == $index" ng-click="startEditingDate(entry, $index)">{{entry.date | utc | date:'yyyy-MM-dd HH:mm'}}</td>
+        <td ng-show="editingDate == $index">
+          <input ng-model="entry.date" class="datetimeelement">
+          <button ng-click="doneEditingDate(entry.id, false)">OK</button>
+          <button ng-click="doneEditingDate(entry.id, true)">Cancel</button>
         </td>
-        <td ng-hide="editingDescription" ng-click="startEditingDescription(entry)">{{entry.description}}</td>
-        <td ng-show="editingDescription">
+        <td ng-hide="editingDescription == $index" ng-click="startEditingDescription(entry, $index)">{{entry.description}}</td>
+        <td ng-show="editingDescription == $index">
           <input ng-model="entry.description">
-          <button ng-click="doneEditingDescription(entry.id)">OK</button>
+          <button ng-click="doneEditingDescription(entry.id, false)">OK</button>
+          <button ng-click="doneEditingDescription(entry.id, true)">Cancel</button>
         </td>
         <td> <a href="#" ng-click="deleteEntry(entry.id, $index)">x</a> </td>
       </tr>
@@ -64,7 +68,7 @@
 </table>
 <br>
 
-  <h1>Daily listing</h1>
+  <h1>Daily count</h1>
   <table class="table table-striped">
     <thead>
     <tr>
