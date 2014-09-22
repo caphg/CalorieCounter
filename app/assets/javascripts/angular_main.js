@@ -193,19 +193,23 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     };
 
     $scope.createNewEntry = function(){
-        $http({
-            url: "/entries.json",
-            data: $scope.newEntry,
-            method: "POST"
-        }).success(function (data) {
-            $scope.entries.push(data);
-            $scope.reloadData();
-            cancelEditing();
-            resetNewForm();
-        }).fail(function (data){
-            alert(JSON.stringify(data));
-            log("error crating entry");
-        });
+        if($scope.newEntryForm.$valid){
+            $http({
+                url: "/entries.json",
+                data: $scope.newEntry,
+                method: "POST"
+            }).success(function (data) {
+                $scope.entries.push(data);
+                $scope.reloadData();
+                cancelEditing();
+                resetNewForm();
+            }).error(function (data){
+                log("error crating entry");
+            });
+        } else {
+            alert("Please input the fields correctly.");
+        }
+
     };
 
     var resetNewForm = function () {
