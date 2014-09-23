@@ -18,4 +18,5 @@
 //= require bootstrap
 //= require moment
 //= require bootstrap-datetimepicker
+//= require gritter
 //= require_tree .

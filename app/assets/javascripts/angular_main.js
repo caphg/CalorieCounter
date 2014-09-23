@@ -203,12 +203,31 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 $scope.reloadData();
                 cancelEditing();
                 resetNewForm();
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Success",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: "Added."
+                });
             }).error(function (data){
-                alert(data);
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Error",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: data[0]
+                });
                 log("error crating entry");
             });
         } else {
-            alert("Please input the fields correctly.");
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: "Error",
+                time: 10000,
+                // (string | mandatory) the text inside the notification
+                text: "Please input the fields correctly."
+            });
         }
 
     };
