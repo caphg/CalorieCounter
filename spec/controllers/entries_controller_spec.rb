@@ -24,39 +24,40 @@ RSpec.describe EntriesController, :type => :controller do
   # Entry. As you add validations to Entry, be sure to
   # adjust the attributes here as well.
 
-  let(:current_user) { FactoryGirl.create(:user) }
-  let(:other_user) { FactoryGirl.create(:user) }
-  let(:valid_attributes) {
+  let!(:current_user) { FactoryGirl.create(:user) }
+  let!(:other_user) { FactoryGirl.create(:user) }
+  let!(:valid_attributes) {
     {meal: 'pizza', date: '2014/07/08', description: 'some pizza', calories: 2000, user_id: current_user.id}
 
   }
 
-  let(:invalid_attributes) {
+  let!(:invalid_attributes) {
     {invalid_attr: 'invalid'}
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # EntriesController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  let!(:valid_session) { {} }
 
 
   before { sign_in current_user }
 
   describe "GET index" do
-    let(:entry_in_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 15:00')}
-    let(:entry_not_in_date_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-05-21 15:00')}
-    let(:entry_not_in_time_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 17:00')}
-    let(:date_from) {'2014/09/20'}
-    let(:date_to) {'2014/09/22'}
-    let(:time_from) {'10:00'}
-    let(:time_to) {'16:00'}
+    let!(:entry_in_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 15:00')}
+    let!(:entry_not_in_date_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-05-21 15:00')}
+    let!(:entry_not_in_time_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 17:00')}
+    let!(:date_from) {'2014/09/20'}
+    let!(:date_to) {'2014/09/22'}
+    let!(:time_from) {'10:00'}
+    let!(:time_to) {'16:00'}
 
     it "gets all entries which belong to me" do
       my_entry = FactoryGirl.create(:entry, user: current_user)
       not_my_entry = FactoryGirl.create(:entry, user: other_user)
       get :index
-      assigns(:entries).should =~ [my_entry]
+      assigns(:entries).should =~ [my_entry, entry_in_range, entry_not_in_date_range,entry_not_in_time_range]
+      assigns(:entries).should_not include(not_my_entry)
     end
 
     it "gets all entries within a specified date range" do
@@ -67,6 +68,16 @@ RSpec.describe EntriesController, :type => :controller do
     it "gets all entries if dates/times are faulty" do
       get :index, dateFrom: date_from, dateTo: date_to, timeFrom: time_from, timeTo: 'faulty_time'
       assigns(:entries).should =~ [entry_in_range,entry_not_in_date_range,entry_not_in_time_range]
+    end
+
+    it "gets sum by dates within period" do
+      get :daily, dateFrom: date_from, dateTo: date_to, timeFrom: time_from, timeTo: time_to
+      entries = Entry.where('user_id = ?
+                           AND "time"(date) BETWEEN ? AND ?
+                           AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, time_from, time_to, Date.parse(date_from), Date.parse(date_to)).
+                    select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
+
+      assigns(:entries).map {|f| f.calories}.should =~ [2000]
     end
 
 
@@ -84,8 +95,8 @@ RSpec.describe EntriesController, :type => :controller do
   end
 
   describe "GET show" do
-    let(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
-    let(:not_my_entry) {FactoryGirl.create(:entry, user: other_user)}
+    let!(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
+    let!(:not_my_entry) {FactoryGirl.create(:entry, user: other_user)}
 
     it "assigns the requested entry as @entry" do
       get :show, {:id => my_entry.to_param}
@@ -152,7 +163,7 @@ RSpec.describe EntriesController, :type => :controller do
 
   describe "/PATCH update" do
     describe "with valid params" do
-      let(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
+      let!(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
 
       it "updates the requested entry" do
         expect {patch :update, id: my_entry.id, entry: {meal: "pizza with cheese"} , :format => :json}.
@@ -162,7 +173,7 @@ RSpec.describe EntriesController, :type => :controller do
     end
 
     describe "with invalid params" do
-      let(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
+      let!(:my_entry) {FactoryGirl.create(:entry, user: current_user)}
 
       it "assigns the entry as @entry" do
         put :update, {:id => my_entry.id, :entry => invalid_attributes}
