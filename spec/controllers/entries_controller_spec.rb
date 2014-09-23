@@ -44,40 +44,44 @@ RSpec.describe EntriesController, :type => :controller do
   before { sign_in current_user }
 
   describe "GET index" do
-    let!(:entry_in_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 15:00')}
-    let!(:entry_not_in_date_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-05-21 15:00')}
-    let!(:entry_not_in_time_range) {FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 17:00')}
-    let!(:date_from) {'2014/09/20'}
-    let!(:date_to) {'2014/09/22'}
-    let!(:time_from) {'10:00'}
-    let!(:time_to) {'16:00'}
+    let(:date_from) {'2014/09/20'}
+    let(:date_to) {'2014/09/22'}
+    let(:time_from) {'10:00'}
+    let(:time_to) {'16:00'}
 
     it "gets all entries which belong to me" do
       my_entry = FactoryGirl.create(:entry, user: current_user)
       not_my_entry = FactoryGirl.create(:entry, user: other_user)
       get :index
-      assigns(:entries).should =~ [my_entry, entry_in_range, entry_not_in_date_range,entry_not_in_time_range]
+      assigns(:entries).should =~ [my_entry]
       assigns(:entries).should_not include(not_my_entry)
     end
 
     it "gets all entries within a specified date range" do
+      entry_in_range = FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 15:00')
+      entry_not_in_date_range = FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-05-21 15:00')
+      entry_not_in_time_range = FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 17:00')
       get :index, dateFrom: date_from, dateTo: date_to, timeFrom: time_from, timeTo: time_to
       assigns(:entries).should =~ [entry_in_range]
     end
 
     it "gets all entries if dates/times are faulty" do
+      some_entry = FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 15:00')
       get :index, dateFrom: date_from, dateTo: date_to, timeFrom: time_from, timeTo: 'faulty_time'
-      assigns(:entries).should =~ [entry_in_range,entry_not_in_date_range,entry_not_in_time_range]
+      assigns(:entries).should =~ [some_entry]
     end
 
-    it "gets sum by dates within period" do
+    it "gets sum by date within period" do
+      first_entry = FactoryGirl.create(:entry, calories:1000, user: current_user, date: '2014-09-21 10:00')
+      second_entry = FactoryGirl.create(:entry, calories:2000, user: current_user, date: '2014-09-21 13:00')
+      third_entry = FactoryGirl.create(:entry, calories:3000, user: current_user, date: '2014-09-21 15:00')
       get :daily, dateFrom: date_from, dateTo: date_to, timeFrom: time_from, timeTo: time_to
-      entries = Entry.where('user_id = ?
-                           AND "time"(date) BETWEEN ? AND ?
-                           AND CAST(date AS DATE) >= ? and CAST(date AS DATE) <= ?', current_user.id, time_from, time_to, Date.parse(date_from), Date.parse(date_to)).
-                    select('CAST(date AS DATE), sum(calories) as calories').group('CAST(date AS DATE)')
 
-      assigns(:entries).map {|f| f.calories}.should =~ [2000]
+      sum = 0
+      assigns(:entries).each do |entry|
+        sum += entry.calories
+      end
+      sum.should eq 6000
     end
 
 
