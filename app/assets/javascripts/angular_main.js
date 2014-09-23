@@ -330,8 +330,22 @@ app.controller('UserController', ['$scope', '$http',  function($scope, $http) {
         }).success(function () {
             $scope.editingCalories = false;
             $scope.user.daily_calories = $scope.calories;
-        }).fail(function (){
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: "Success",
+                time: 10000,
+                // (string | mandatory) the text inside the notification
+                text: "Updated."
+            });
+        }).error(function (){
             log("error updating calories");
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: "Error",
+                time: 10000,
+                // (string | mandatory) the text inside the notification
+                text: "Invalid value."
+            });
         });
     };
 }]);

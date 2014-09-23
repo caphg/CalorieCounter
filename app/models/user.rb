@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
 
   has_many :entries
-  validates :daily_calories, numericality: {min:0, max:100000}
+  validates :daily_calories, numericality: {greater_than_or_equal_to:0, less_than:100000}
 
   before_save :ensure_authentication_token
 
