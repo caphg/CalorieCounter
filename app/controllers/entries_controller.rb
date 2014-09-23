@@ -105,7 +105,7 @@ class EntriesController < ApplicationController
   end
 
   def use_token(token)
-    current_user = User.find_by_access_token(token)
+    current_user = User.find_by_auth_token(token)
     if current_user.nil?
       head :unauthorized
     else
