@@ -204,6 +204,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 cancelEditing();
                 resetNewForm();
             }).error(function (data){
+                alert(data);
                 log("error crating entry");
             });
         } else {
