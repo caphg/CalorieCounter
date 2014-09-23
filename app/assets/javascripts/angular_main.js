@@ -84,7 +84,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 method: "PATCH"
             }).success(function () {
                 $scope.editingMeal = -1;
-            }).fail(function (){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Success",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: "Saved."
+                });
+            }).error(function (data){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Error",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: data[0]
+                });
                 log("error updating meal");
             });
         }
@@ -108,7 +122,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             }).success(function () {
                 $scope.editingCalories = -1;
                 $scope.reloadData();
-            }).fail(function (){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Success",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: "Saved."
+                });
+            }).error(function (data){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Error",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: data[0]
+                });
                 log("error updating calories");
             });
         }
@@ -132,7 +160,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             }).success(function () {
                 $scope.editingDate = -1;
                 $scope.reloadData();
-            }).fail(function (){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Success",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: "Saved."
+                });
+            }).error(function (data){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Error",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: data[0]
+                });
                 log("error updating date");
             });
         }
@@ -155,7 +197,21 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 method: "PATCH"
             }).success(function () {
                 $scope.editingDescription = -1;
-            }).fail(function (){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Success",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: "Saved."
+                });
+            }).error(function (data){
+                $.gritter.add({
+                    // (string | mandatory) the heading of the notification
+                    title: "Error",
+                    time: 10000,
+                    // (string | mandatory) the text inside the notification
+                    text: data[0]
+                });
                 log("error updating description");
             });
         }
@@ -176,7 +232,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
                 $scope.entries.splice(index,1);
                 $scope.reloadData();
                 cancelEditing();
-            }).fail(function (){
+            }).error(function (){
                 log("error deleting entry");
             });
 

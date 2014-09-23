@@ -14,8 +14,8 @@ RSpec.describe Entry, :type => :model do
   end
 
   describe "#calories" do
-    it "should be between 1 and 100000" do
-      should validate_numericality_of(:calories).is_greater_than(1).is_less_than(100000)
+    it "should be between 0 and 100000" do
+      should validate_numericality_of(:calories).is_greater_than_or_equal_to(0).is_less_than(100000)
     end
 
     it "allows decimal values" do

@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :auth!
   before_action :set_entry, only: [:show, :destroy, :update]
 
   # GET /entries
@@ -57,7 +57,7 @@ class EntriesController < ApplicationController
         format.json { render :show, status: :ok, location: @entry }
       else
         format.html { render :edit }
-        format.json { render json: @entry.errors, status: :unprocessable_entity }
+        format.json { render json: @entry.errors.full_messages, status: :unprocessable_entity }
       end
     end
   end
@@ -95,4 +95,21 @@ class EntriesController < ApplicationController
         false
       end
     end
+
+  def auth!
+    if params.has_key?(:auth_token)
+      use_token(params[:auth_token])
+    else
+      authenticate_user!
+    end
+  end
+
+  def use_token(token)
+    current_user = User.find_by_access_token(token)
+    if current_user.nil?
+      head :unauthorized
+    else
+      sign_in(current_user)
+    end
+  end
 end
