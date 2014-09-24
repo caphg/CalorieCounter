@@ -1,6 +1,7 @@
 class EntriesController < ApplicationController
   before_action :auth!
   before_action :set_entry, only: [:show, :destroy, :update]
+  before_action :check_date, only: [:create, :update]
 
   # GET /entries
   # GET /entries.json
@@ -93,6 +94,14 @@ class EntriesController < ApplicationController
         true
       rescue TypeError, ArgumentError
         false
+      end
+    end
+
+    def check_date
+      begin
+        DateTime.parse(params[:date]) if params.has_key?(:date)
+      rescue ArgumentError
+        head :unprocessable_entity
       end
     end
 
