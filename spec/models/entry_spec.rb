@@ -35,7 +35,7 @@ RSpec.describe Entry, :type => :model do
 
   describe "#description" do
     it "should be between 1 and 10000 chars long" do
-      should ensure_length_of(:description).is_at_least(1).is_at_most(10000)
+      should ensure_length_of(:description).is_at_most(10000)
     end
   end
 
