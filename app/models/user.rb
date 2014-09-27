@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
 
   has_many :entries
-  validates :daily_calories, numericality: {greater_than_or_equal_to:0, less_than:100000}
+  validates :daily_calories, numericality: {greater_than_or_equal_to:0, less_than:100000}, allow_blank: true
 
   before_save :ensure_authentication_token
 
@@ -19,8 +19,11 @@ class User < ActiveRecord::Base
   end
 
   def init_prefs
-    self.daily_calories = 2000
-    self.save
+    if self.daily_calories.nil?
+      self.daily_calories = 2000
+      self.save
+    end
+
   end
 
   private
