@@ -37,7 +37,7 @@
   </thead>
 
   <tbody>
-      <tr ng-repeat="entry in entries | orderBy:'-date'">
+      <tr ng-repeat="entry in entries">
         <td ng-hide="editingMeal == $index" ng-click="startEditingMeal(entry, $index)">{{entry.meal}}</td>
         <td ng-show="editingMeal == $index">
           <input ng-model="entry.meal">

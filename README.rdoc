@@ -2,7 +2,6 @@
 
 This is a Toptal example project.
 
-Things you may want to cover:
 
 * Ruby 2.1, Rails 4
 
