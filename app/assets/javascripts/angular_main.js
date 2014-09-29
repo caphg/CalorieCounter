@@ -44,7 +44,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
     $scope.timeFrom = "00:00";
     $scope.timeTo = "23:59";
     $scope.user = {};
-    $scope.entry = {};
+    $scope.editableEntry = {};
 
     $scope.init = function () {
         $scope.reloadData();
@@ -75,15 +75,15 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
 
     $scope.doneEditingMeal = function(id, cancelled){
         if(cancelled){
-            $scope.editingMeal = -1;
-            $scope.reloadData();
+            doneEditing();
         } else {
             $http({
                 url: "/entries/"+id+".json",
-                data: $scope.entry,
+                data: {"meal": $scope.editableEntry.meal},
                 method: "PATCH"
             }).success(function () {
-                $scope.editingMeal = -1;
+                doneEditing();
+                $scope.reloadData();
                 $.gritter.add({
                     // (string | mandatory) the heading of the notification
                     title: "Success",
@@ -107,20 +107,19 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
 
     $scope.startEditingMeal = function(val, idx){
         $scope.editingMeal = idx;
-        $scope.entry = val;
+        $scope.editableEntry.meal = val.meal;
     };
 
     $scope.doneEditingCalories = function(id, cancelled){
         if(cancelled){
-            $scope.editingCalories = -1;
-            $scope.reloadData();
+            doneEditing();
         } else {
             $http({
                 url: "/entries/"+id+".json",
-                data: $scope.entry,
+                data: {"calories": $scope.editableEntry.calories},
                 method: "PATCH"
             }).success(function () {
-                $scope.editingCalories = -1;
+                doneEditing();
                 $scope.reloadData();
                 $.gritter.add({
                     // (string | mandatory) the heading of the notification
@@ -145,20 +144,19 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
 
     $scope.startEditingCalories = function(val,idx){
         $scope.editingCalories = idx;
-        $scope.entry = val;
+        $scope.editableEntry.calories = val.calories;
     };
 
     $scope.doneEditingDate = function(id, cancelled){
         if(cancelled){
-            $scope.editingDate = -1;
-            $scope.reloadData();
+            doneEditing();
         } else {
             $http({
                 url: "/entries/"+id+".json",
-                data: $scope.entry,
+                data: {"date": $scope.editableEntry.date},
                 method: "PATCH"
             }).success(function () {
-                $scope.editingDate = -1;
+                doneEditing();
                 $scope.reloadData();
                 $.gritter.add({
                     // (string | mandatory) the heading of the notification
@@ -183,20 +181,20 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
 
     $scope.startEditingDate = function(val, idx){
         $scope.editingDate = idx;
-        $scope.entry = val;
+        $scope.editableEntry.date = val.date;
     };
 
     $scope.doneEditingDescription = function(id, cancelled){
         if(cancelled){
-            $scope.editingDescription = -1;
-            $scope.reloadData();
+            doneEditing();
         } else {
             $http({
                 url: "/entries/"+id+".json",
-                data: $scope.entry,
+                data: {"description": $scope.editableEntry.description},
                 method: "PATCH"
             }).success(function () {
-                $scope.editingDescription = -1;
+                doneEditing();
+                $scope.reloadData();
                 $.gritter.add({
                     // (string | mandatory) the heading of the notification
                     title: "Success",
@@ -220,7 +218,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
 
     $scope.startEditingDescription = function(val, idx){
         $scope.editingDescription = idx;
-        $scope.entry = val;
+        $scope.editableEntry.description = val.description;
     };
     
     $scope.deleteEntry = function (id, index) {
@@ -231,7 +229,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             }).success(function () {
                 $scope.entries.splice(index,1);
                 $scope.reloadData();
-                cancelEditing();
+                doneEditing();
             }).error(function (){
                 log("error deleting entry");
             });
@@ -257,7 +255,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
             }).success(function (data) {
                 $scope.entries.push(data);
                 $scope.reloadData();
-                cancelEditing();
+                doneEditing();
                 resetNewForm();
                 $.gritter.add({
                     // (string | mandatory) the heading of the notification
@@ -295,7 +293,7 @@ app.controller('CaloriesController', ['$scope', '$http',  function($scope, $http
         $scope.newEntry.description = "";
     };
 
-    var cancelEditing = function (){
+    var doneEditing = function (){
         $scope.editingMeal = -1;
         $scope.editingCalories = -1;
         $scope.editingDate = -1;

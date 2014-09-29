@@ -5,6 +5,10 @@ This is a Toptal example project.
 
 * Ruby 2.1, Rails 4
 
+* AngularJS
+
+* Twitter Bootstrap
+
 * Postgres DB
 
 Write an application for the input of calories
