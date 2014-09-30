@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :entries, only:[:index, :show, :create, :update, :destroy]
+  resources :entries, only: [:index, :show, :create, :update, :destroy]
   get '/daily', :to => 'entries#daily'
   get '/user', :to => 'users#profile', :as => :user_profile
   patch '/user', :to => 'users#update'
